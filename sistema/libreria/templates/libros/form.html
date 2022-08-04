@@ -1,0 +1,31 @@
+<form enctype="multipart/form-data" method="post">
+  {% csrf_token %} {% comment %}Verificamos mediante un token de que el formulario que recibimos sea de nuestra aplicacion{% endcomment %}
+  
+  {% for campo in formulario %} {% comment %} usamos formulario que contiene la informacion del formulario original, la cual fue definida en la view {% endcomment %}
+
+  <div class="mb-3">
+    <label for="" class="form-label">{{campo.label}}</label> {% comment %} Heredamos de nuestro modelo Libro el verbose_name segun corresponds al campo {% endcomment %}
+
+    {% comment %} mostrar la imagen en la vista de editar{% endcomment %}
+    {% if campo.field.widget.input_type == "file" and campo.value %}
+    <br>
+    <img src="{{MEDIA_URL}}/imagenes/{{campo.value}}" width="100" alt="">
+    {% endif %}
+
+    <input 
+    type="{{ campo.field.widget.input_type}}" {% comment%} Heredamos de nuestro formulario original los tipos de campo segun corresponda{% endcomment %}
+    class="form-control" 
+    name="{{campo.name}}" 
+    id="" 
+    aria-describedby="helpId" 
+    placeholder="{{campo.label}}"
+    value="{{campo.value | default:""}}">
+
+  </div>
+  <div class="col-12 help-text">{{campo.errors}}</div> {% comment %}nos aseguramos que no se dejen campos vacios o cualquier otro error al crear el nuevo manga {% endcomment %}
+  {% endfor %}
+
+  <input name="" id="" class="btn btn-success" type="submit" value="AGREGAR">
+  <a name="" id="" class="btn btn-dark" href="{% url 'libros'%}" role="button">Cancelar</a>
+     
+</form>
